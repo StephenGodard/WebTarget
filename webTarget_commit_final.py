@@ -72,7 +72,7 @@ def Ajouter():
 def importer():
     Home.destroy()
     main = Tk()
-    main.geometry("350x500")
+    main.geometry("500x500")
     buttonAdd = Button(main, text="Ajouter", command=lambda *args: Add())
     buttonAdd.configure(width="10", height="3")
     buttonAdd.place(x=75, y=25)
@@ -92,7 +92,39 @@ def importer():
             ++i
 
     liste.place(x=20, y=250)
+def newfile():
+    Home.destroy()
+    main = Tk()
+    main.geometry("500x500")
+    buttonAdd = Button(main, text="Ajouter", command=lambda *args: Add())
+    buttonAdd.configure(width="10", height="3")
+    buttonAdd.place(x=75, y=25)
+    buttonRefresh = Button(main, text="Rafraichir")
+    buttonRefresh.configure(width="10", height="3")
+    buttonRefresh.place(x=200, y=25)
+    double = Button(main, text="Dédoubloner", command=lambda: double)
+    double.configure(width="10", height="3")
+    double.place(x=75, y=100)
+    liste = Listbox(main)
+    liste.configure(width="45", height="15")
+    filepath = filedialog.asksaveasfilename(initialdir = "/home/stephen/PycharmProjects/untilted1/venv",title = "Select file",filetypes = (("csv files","*.csv"),("all files","*.*")))
+    i = 1
+    j = 45
+    namefilepath = filepath[j]
 
+    lenghtFilepath=len(filepath)
+    for j in range(j+1, lenghtFilepath):
+        namefilepath = namefilepath + filepath[j]
+
+    print(namefilepath)
+
+
+    with open(namefilepath, 'w+') as FILE:
+        for ligne in FILE.readlines():
+            liste.insert(i, ligne)
+            ++i
+
+    liste.place(x=20, y=250)
 
 
 
@@ -104,7 +136,7 @@ label.place(x=180, y=150)
 importer = Button(Home, text="importer csv",command=importer)
 importer.config( height = 5, width = 10 )
 importer.place(x=220,y=300)
-nouveau= Button(Home,text="nouveau")
+nouveau= Button(Home,text="nouveau",command=newfile)
 nouveau.config( height = 5, width = 10 )
 nouveau.place(x=390,y=300)
 
