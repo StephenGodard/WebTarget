@@ -3,6 +3,13 @@ import csv
 import time
 from tkinter import *
 from tkinter import filedialog
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+import os
+import requests
+from bs4 import BeautifulSoup
+import re
 def refreshList(name):
     namefilepath=name
     liste = Listbox()
@@ -35,6 +42,36 @@ def Add(namefilepath):
     buttonPrint = Button(newWindow, text="ok", command=lambda: Ajouter(name))
 
     buttonPrint.place(x=75, y=105)
+
+def crawlToImport(url,namefilepath):
+    url1=url.get()
+    plainPage = requests.get(url1).text
+    beautifulPage = str(BeautifulSoup(plainPage, "html.parser"))
+    result = re.findall(r'[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+', beautifulPage)
+
+    str1 = ''.join(result)
+    FILE = open(namefilepath, "a")
+    FILE.write(str1)
+    FILE.write("\n")
+    FILE.close()
+    print(list(set(result)))
+
+def crawlformail(name):
+    namefilepath=name
+    newWindow = Tk()
+
+    newWindow.geometry("600x250")
+
+    newWindow.title("URL")
+
+    labelurl = Label(newWindow, text="Importer un url")
+    labelurl.place(x=75, y=50)
+    url = Entry(newWindow, width=30, justify='right')
+    url.place(x=75,y=75)
+    buttonurl = Button(newWindow, text="ok", command=lambda: crawlToImport(url,namefilepath))
+    buttonurl.place(x=75, y=105)
+
+
 
 
 def Ajouter(name):
@@ -88,12 +125,17 @@ def importer():
     buttonRefresh = Button(main, text="Rafraichir", command=lambda:refreshList(namefilepath))
     buttonRefresh.configure(width="10", height="3")
     buttonRefresh.place(x=200, y=25)
+    buttonURL = Button(main, text="import url", command=lambda: crawlformail(namefilepath))
+    buttonURL.configure(width="10", height="3")
+    buttonURL.place(x=200, y=100)
     with open(namefilepath, 'r') as FILE:
         for ligne in FILE.readlines():
             liste.insert(i, ligne)
             ++i
 
     liste.place(x=20, y=250)
+
+
 def newfile():
     Home.destroy()
     main = Tk()
