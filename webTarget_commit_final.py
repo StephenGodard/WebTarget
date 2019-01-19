@@ -2,16 +2,17 @@ import tkinter
 import csv
 from tkinter import *
 from tkinter import filedialog
-def refreshList(newWindow):
-    liste = Listbox(newWindow)
-    liste.configure(width="120", height="29")
+def refreshList(*args):
+
+    liste = Listbox()
+    liste.configure(width="45", height="15")
     i = 1
     with open("listeAdress.csv", 'r') as FILE:
         for ligne in FILE.readlines():
             liste.insert(i, ligne)
             ++i
 
-    liste.place(x=20, y=300)
+    liste.place(x=20, y=250)
 
 def double():
     lines = open('listeAdress.csv', 'r').readlines()
@@ -23,7 +24,7 @@ def double():
     for line in lines_set:
         out.write(line)
 
-def Add(*args):
+def Add():
 
     newWindow = Tk()
 
@@ -76,7 +77,7 @@ def importer():
     buttonAdd = Button(main, text="Ajouter", command=lambda *args: Add())
     buttonAdd.configure(width="10", height="3")
     buttonAdd.place(x=75, y=25)
-    buttonRefresh=Button(main,text="Rafraichir")
+    buttonRefresh=Button(main,text="Rafraichir",command=lambda *args: refreshList())
     buttonRefresh.configure(width="10", height="3")
     buttonRefresh.place(x=200,y=25)
     double = Button(main, text="Dédoubloner", command=lambda: double)
@@ -84,9 +85,16 @@ def importer():
     double.place(x=75, y=100)
     liste = Listbox(main)
     liste.configure(width="45", height="15")
-    filepath = filedialog.askopenfilename(filetypes=[('Adresselist.csv', '.csv')])
-    i = 1
-    with open("listeAdress.csv", 'r') as FILE:
+    filepath = filedialog.askopenfilename(filetypes=[('csv files', '.csv')])
+    i=0
+    j=45
+    namefilepath = filepath[j]
+
+    lenghtFilepath = len(filepath)
+    for j in range(j + 1, lenghtFilepath):
+        namefilepath = namefilepath + filepath[j]
+
+    with open(namefilepath, 'r') as FILE:
         for ligne in FILE.readlines():
             liste.insert(i, ligne)
             ++i
@@ -108,7 +116,7 @@ def newfile():
     liste = Listbox(main)
     liste.configure(width="45", height="15")
     filepath = filedialog.asksaveasfilename(initialdir = "/home/stephen/PycharmProjects/untilted1/venv",title = "Select file",filetypes = (("csv files","*.csv"),("all files","*.*")))
-    i = 1
+    i = 0
     j = 45
     namefilepath = filepath[j]
 
@@ -130,6 +138,7 @@ def newfile():
 
 
 Home = Tk()
+
 Home.configure(width="680", height="550")
 label = Label(Home, text="Bienvenue sur WebTarget !",font='Helvetica 18 bold')
 label.place(x=180, y=150)
