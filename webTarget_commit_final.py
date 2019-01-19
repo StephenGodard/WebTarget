@@ -1,30 +1,22 @@
 import tkinter
 import csv
+import time
 from tkinter import *
 from tkinter import filedialog
-def refreshList(*args):
-
+def refreshList(name):
+    namefilepath=name
     liste = Listbox()
     liste.configure(width="45", height="15")
     i = 1
-    with open("listeAdress.csv", 'r') as FILE:
+    with open(namefilepath, 'r') as FILE:
         for ligne in FILE.readlines():
             liste.insert(i, ligne)
             ++i
 
     liste.place(x=20, y=250)
 
-def double():
-    lines = open('listeAdress.csv', 'r').readlines()
 
-    lines_set = set(lines)
-
-    out = open('listeAdress.csv', 'w')
-
-    for line in lines_set:
-        out.write(line)
-
-def Add():
+def Add(namefilepath):
 
     newWindow = Tk()
 
@@ -39,20 +31,21 @@ def Add():
     car = "@"
     com = ".com"
     fr = ".fr"
-
-    buttonPrint = Button(newWindow, text="ok", command=Ajouter)
+    name=namefilepath
+    buttonPrint = Button(newWindow, text="ok", command=lambda: Ajouter(name))
 
     buttonPrint.place(x=75, y=105)
 
-    print("adress mail incorrect !")
-def Ajouter():
+
+def Ajouter(name):
     car = "@"
     com = ".com"
     fr = ".fr"
+    namefilepath=name
     Adresslist = newAdress.get()
     if car in Adresslist:
         if com in Adresslist:
-            Adress = open("listeAdress.csv", "a")
+            Adress = open(namefilepath, "a")
             Adress.write(Adresslist)
             Adress.write("\n")
             Adress.close()
@@ -62,7 +55,7 @@ def Ajouter():
 
 
         elif fr in Adresslist:
-            Adress = open("listeAdress.csv", "a")
+            Adress = open(namefilepath, "a")
             Adress.write(Adresslist)
             Adress.write("\n")
             Adress.close()
@@ -74,12 +67,8 @@ def importer():
     Home.destroy()
     main = Tk()
     main.geometry("500x500")
-    buttonAdd = Button(main, text="Ajouter", command=lambda *args: Add())
-    buttonAdd.configure(width="10", height="3")
-    buttonAdd.place(x=75, y=25)
-    buttonRefresh=Button(main,text="Rafraichir",command=lambda *args: refreshList())
-    buttonRefresh.configure(width="10", height="3")
-    buttonRefresh.place(x=200,y=25)
+
+
     double = Button(main, text="Dédoubloner", command=lambda: double)
     double.configure(width="10", height="3")
     double.place(x=75, y=100)
@@ -93,7 +82,12 @@ def importer():
     lenghtFilepath = len(filepath)
     for j in range(j + 1, lenghtFilepath):
         namefilepath = namefilepath + filepath[j]
-
+    buttonAdd = Button(main, text="Ajouter", command=lambda: Add(namefilepath))
+    buttonAdd.configure(width="10", height="3")
+    buttonAdd.place(x=75, y=25)
+    buttonRefresh = Button(main, text="Rafraichir", command=lambda:refreshList(namefilepath))
+    buttonRefresh.configure(width="10", height="3")
+    buttonRefresh.place(x=200, y=25)
     with open(namefilepath, 'r') as FILE:
         for ligne in FILE.readlines():
             liste.insert(i, ligne)
@@ -104,12 +98,6 @@ def newfile():
     Home.destroy()
     main = Tk()
     main.geometry("500x500")
-    buttonAdd = Button(main, text="Ajouter", command=lambda *args: Add())
-    buttonAdd.configure(width="10", height="3")
-    buttonAdd.place(x=75, y=25)
-    buttonRefresh = Button(main, text="Rafraichir")
-    buttonRefresh.configure(width="10", height="3")
-    buttonRefresh.place(x=200, y=25)
     double = Button(main, text="Dédoubloner", command=lambda: double)
     double.configure(width="10", height="3")
     double.place(x=75, y=100)
@@ -122,17 +110,21 @@ def newfile():
 
     lenghtFilepath=len(filepath)
     for j in range(j+1, lenghtFilepath):
-        namefilepath = namefilepath + filepath[j]
 
+        namefilepath = namefilepath + filepath[j]
     print(namefilepath)
 
-
+    buttonAdd = Button(main, text="Ajouter", command=lambda: Add(namefilepath))
+    buttonAdd.configure(width="10", height="3")
+    buttonAdd.place(x=75, y=25)
+    buttonRefresh = Button(main, text="Rafraichir", command=lambda: refreshList(namefilepath))
+    buttonRefresh.configure(width="10", height="3")
+    buttonRefresh.place(x=200, y=25)
     with open(namefilepath, 'w+') as FILE:
-        for ligne in FILE.readlines():
-            liste.insert(i, ligne)
-            ++i
-
+        FILE.close()
     liste.place(x=20, y=250)
+
+
 
 
 
