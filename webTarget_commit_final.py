@@ -7,9 +7,53 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import os
+import subprocess
 import requests
 from bs4 import BeautifulSoup
 import re
+def verifAdress(namefilepath):
+    testAddr=''
+
+    with open(namefilepath, 'r') as FILE:
+        for ligne in FILE.readlines():
+            testAddr=ligne
+            domain = testAddr.split('@')
+            os.system('ping -c 2 ' + ' ' + domain[1] + '  > ping.txt')
+        if os.path.getsize("ping.txt") == 0:
+            print("KO")
+
+        else:
+            print("OK")
+def sendMail():
+
+    newWindow = Tk()
+
+    newWindow.geometry("650x650")
+
+    newWindow.title("Envois de mail")
+
+    expediteur=Label(newWindow,text="expéditeur:")
+    expediteur.place(x=25,y=50)
+    expediteurInput=Entry(newWindow, width=30, justify='right')
+    expediteurInput.place(x=25,y=75)
+    mailTotxt = Label(newWindow, text="Destinataire:")
+    mailTotxt.place(x=25, y=100)
+    mailTo = Entry(newWindow, width=30, justify='right')
+    mailTo.place(x=25, y=125)
+    mailToObjtxt = Label(newWindow, text="Objet:")
+    mailToObjtxt.place(x=25, y=150)
+    mailToObj = Entry(newWindow, width=30, justify='right')
+    mailToObj.place(x=25, y=175)
+    mailToMSG = Label(newWindow, text="message:")
+    mailToMSG.place(x=25, y=200)
+    mailToMSG1 = Text(newWindow)
+    mailToMSG1.place(x=25, y=225)
+    buttonAdd = Button(newWindow, text="Envoyer", command=lambda: Add(namefilepath))
+    buttonAdd.configure(width="10", height="3")
+    buttonAdd.place(x=25, y=575)
+
+
+
 def double(namefilepath):
     listeFile=0
     fichierCSV = []
@@ -120,7 +164,7 @@ def Ajouter(name):
 def importer():
     Home.destroy()
     main = Tk()
-    main.geometry("500x500")
+    main.geometry("550x500")
 
 
 
@@ -146,6 +190,12 @@ def importer():
     Ddouble = Button(main, text="Dédoubloner", command=lambda: double(namefilepath))
     Ddouble.configure(width="10", height="3")
     Ddouble.place(x=75, y=100)
+    verif = Button(main, text="verifAdress", command=lambda: verifAdress(namefilepath))
+    verif.configure(width="10", height="3")
+    verif.place(x=400, y=350)
+    mail = Button(main, text="Envoyer un mail", command=lambda: sendMail())
+    mail.configure(width="10", height="3")
+    mail.place(x=400, y=425)
     with open(namefilepath, 'r') as FILE:
         for ligne in FILE.readlines():
             liste.insert(i, ligne)
@@ -184,6 +234,9 @@ def newfile():
     Ddouble = Button(main, text="Dédoubloner", command=lambda: double(namefilepath))
     Ddouble.configure(width="10", height="3")
     Ddouble.place(x=75, y=100)
+    verif = Button(main, text="verifAdress", command=lambda: verifAdress(namefilepath))
+    verif.configure(width="10", height="3")
+    verif.place(x=400, y=350)
     with open(namefilepath, 'w+') as FILE:
         FILE.close()
     liste.place(x=20, y=250)
