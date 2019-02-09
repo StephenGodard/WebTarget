@@ -10,6 +10,23 @@ import os
 import requests
 from bs4 import BeautifulSoup
 import re
+def double(namefilepath):
+    listeFile=0
+    fichierCSV = []
+    with open(namefilepath, 'r') as FILE:
+        for ligne in FILE.readlines():
+            fichierCSV.append(ligne)
+
+    FILE.close()
+
+    p=set(fichierCSV)
+    print(p)
+    list(p)
+    with open(namefilepath, 'w') as FILE:
+        for item in p:
+            FILE.write("%s" % item)
+
+
 def refreshList(name):
     namefilepath=name
     liste = Listbox()
@@ -106,9 +123,7 @@ def importer():
     main.geometry("500x500")
 
 
-    double = Button(main, text="Dédoubloner", command=lambda: double)
-    double.configure(width="10", height="3")
-    double.place(x=75, y=100)
+
     liste = Listbox(main)
     liste.configure(width="45", height="15")
     filepath = filedialog.askopenfilename(filetypes=[('csv files', '.csv')])
@@ -128,6 +143,9 @@ def importer():
     buttonURL = Button(main, text="import url", command=lambda: crawlformail(namefilepath))
     buttonURL.configure(width="10", height="3")
     buttonURL.place(x=200, y=100)
+    Ddouble = Button(main, text="Dédoubloner", command=lambda: double(namefilepath))
+    Ddouble.configure(width="10", height="3")
+    Ddouble.place(x=75, y=100)
     with open(namefilepath, 'r') as FILE:
         for ligne in FILE.readlines():
             liste.insert(i, ligne)
@@ -140,9 +158,7 @@ def newfile():
     Home.destroy()
     main = Tk()
     main.geometry("500x500")
-    double = Button(main, text="Dédoubloner", command=lambda: double)
-    double.configure(width="10", height="3")
-    double.place(x=75, y=100)
+
     liste = Listbox(main)
     liste.configure(width="45", height="15")
     filepath = filedialog.asksaveasfilename(initialdir = "/home/stephen/PycharmProjects/untilted1/venv",title = "Select file",filetypes = (("csv files","*.csv"),("all files","*.*")))
@@ -162,6 +178,12 @@ def newfile():
     buttonRefresh = Button(main, text="Rafraichir", command=lambda: refreshList(namefilepath))
     buttonRefresh.configure(width="10", height="3")
     buttonRefresh.place(x=200, y=25)
+    buttonURL = Button(main, text="import url", command=lambda: crawlformail(namefilepath))
+    buttonURL.configure(width="10", height="3")
+    buttonURL.place(x=200, y=100)
+    Ddouble = Button(main, text="Dédoubloner", command=lambda: double(namefilepath))
+    Ddouble.configure(width="10", height="3")
+    Ddouble.place(x=75, y=100)
     with open(namefilepath, 'w+') as FILE:
         FILE.close()
     liste.place(x=20, y=250)
